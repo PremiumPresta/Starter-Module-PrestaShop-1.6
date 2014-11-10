@@ -1,2 +1,5 @@
-/nbproject/
-/starterpsmodule/config.xml
+*
+!/starterpsmodule/
+!/README.md
+!/.gitignore
+config.xml
