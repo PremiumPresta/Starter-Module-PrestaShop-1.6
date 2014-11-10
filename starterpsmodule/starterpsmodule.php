@@ -13,7 +13,7 @@ class StarterPsModule extends Module {
 
     public function __construct() {
 	$this->name = 'starterpsmodule'; // internal identifier, unique and lowercase
-	$this->tab = ''; // backend module coresponding category - optional since v1.6
+	$this->tab = 'front_office_features'; // backend module coresponding category
 	$this->version = '1.0.0'; // version number for the module
 	$this->author = 'PremiumPresta'; // module author
 	$this->need_instance = 0; // load the module when displaying the "Modules" page in backend
@@ -193,7 +193,7 @@ class StarterPsModule extends Module {
      * Add css and javascript to head
      * @param array $params 
      */
-    public function headScrips($params) {
+    public function headScrips() {
 	$this->context->controller->addCSS($this->_path . 'front.css');
 	$this->context->controller->addJS($this->_path . 'front.js');
     }
@@ -202,7 +202,7 @@ class StarterPsModule extends Module {
      * Homepage content hook (Technical name: displayHome)
      */
     public function hookDisplayHome($params) {
-	$this->headScrips($params);
+	$this->headScrips();
 
 	!isset($params['tpl']) && $params['tpl'] = 'hookHome';
 
