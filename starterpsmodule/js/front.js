@@ -1,5 +1,5 @@
 /**
- * Quick Contact
+ * Starter Module
  * 
  *  @author    PremiumPresta <office@premiumpresta.com>
  *  @copyright 2014 PremiumPresta
