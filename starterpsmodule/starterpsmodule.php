@@ -39,7 +39,6 @@ class StarterPsModule extends Module
 	{
 		return parent::install() &&
 			$this->initConfig() &&
-			$this->registerHook('displayHeader') &&
 			$this->registerHook('displayHome');
 	}
 
