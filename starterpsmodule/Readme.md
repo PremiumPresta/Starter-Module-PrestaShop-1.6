@@ -1,1 +1,1 @@
-# Gear Theme Options
+# PrestaShop Starter Module
