@@ -1,0 +1,1 @@
+# PrestaShop Starter Module
