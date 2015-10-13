@@ -3,7 +3,7 @@
 * 
 *  @author    PremiumPresta <office@premiumpresta.com>
 *  @copyright 2015 PremiumPresta
-*  @license   http://creativecommons.org/licenses/by-nd/4.0/ CC BY-ND 4.0
+*  @license   http://creativecommons.org/licenses/by/4.0/ CC BY 4.0
 *}
 
 <div id="starterpsmodule" class="block">

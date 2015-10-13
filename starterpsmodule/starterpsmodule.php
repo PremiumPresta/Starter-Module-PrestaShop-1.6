@@ -4,7 +4,7 @@
  * 
  *  @author    PremiumPresta <office@premiumpresta.com>
  *  @copyright 2015 PremiumPresta
- *  @license   http://creativecommons.org/licenses/by-nd/4.0/ CC BY-ND 4.0
+ *  @license   http://creativecommons.org/licenses/by/4.0/ CC BY 4.0
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -149,7 +149,7 @@ class StarterPsModule extends Module
             foreach ($languages as $lang) {
                 $config['quote'][$lang['id_lang']] = Tools::getValue('quote_' . $lang['id_lang']);
             }
-            
+
             $config['author'] = Tools::getValue('author');
             $config['show_author'] = Tools::getValue('show_author');
             Configuration::updateValue($this->name, Tools::jsonEncode($config));
@@ -204,7 +204,7 @@ class StarterPsModule extends Module
         foreach ($languages as $lang) {
             $config['quote'][$lang['id_lang']] = 'The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one.';
         }
-        
+
         $config['author'] = 'Mark Twain';
         $config['show_author'] = true;
 
