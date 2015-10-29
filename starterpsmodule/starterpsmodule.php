@@ -152,7 +152,7 @@ class StarterPsModule extends Module
 
             $config['author'] = Tools::getValue('author');
             $config['show_author'] = Tools::getValue('show_author');
-            Configuration::updateValue($this->name, Tools::jsonEncode($config));
+            $this->setConfigValues($config);
 
             return $this->displayConfirmation($this->l('Settings updated'));
         }
@@ -185,11 +185,22 @@ class StarterPsModule extends Module
     }
 
     /**
-     * Set values for the inputs.
+     * Get configuration array from database
+     * @return array
      */
     public function getConfigValues()
     {
         return json_decode(Configuration::get($this->name), true);
+    }
+    
+    /**
+     * Set configuration array to database
+     * @param array $config
+     * @return boolean
+     */
+    public function setConfigValues($config)
+    {
+        return Configuration::updateValue($this->name, json_encode($config));
     }
 
     /**
@@ -208,7 +219,7 @@ class StarterPsModule extends Module
         $config['author'] = 'Mark Twain';
         $config['show_author'] = true;
 
-        return Configuration::updateValue($this->name, json_encode($config));
+        return $this->setConfigValues($config);
     }
 
     /**
@@ -227,7 +238,7 @@ class StarterPsModule extends Module
     {
         !isset($params['tpl']) && $params['tpl'] = 'displayHome';
 
-        $config = json_decode(Configuration::get($this->name), true);
+        $config = $this->getConfigValues();
         $this->smarty->assign($config);
 
         return $this->display(__FILE__, $params['tpl'] . '.tpl');
