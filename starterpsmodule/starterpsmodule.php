@@ -76,7 +76,14 @@ class StarterPsModule extends Module
      */
     public function getContent()
     {
-        $this->context->smarty->assign('module_dir', $this->_path);
+        $this->context->smarty->assign([
+            'module' => [
+                'class' => get_class($this),
+                'name' => $this->name,
+                'displayName' => $this->displayName,
+                'dir' => $this->_path
+            ]
+        ]);
 
         return $this->postProcess() . $this->renderForm();
     }
