@@ -16,7 +16,7 @@ class StarterPsModule extends Module
 
     public function __construct()
     {
-        $this->name = 'starterpsmodule'; // internal identifier, unique and lowercase
+        $this->name = strtolower(get_class($this)); // internal identifier, unique and lowercase
         $this->tab = 'front_office_features'; // backend module coresponding category
         $this->version = '0.0.1'; // version number for the module
         $this->author = 'PremiumPresta'; // module author
