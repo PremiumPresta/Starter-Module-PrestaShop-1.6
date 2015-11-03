@@ -16,7 +16,7 @@ class StarterPsModule extends Module
 
     public function __construct()
     {
-        $this->name = 'starterpsmodule'; // internal identifier, unique and lowercase
+        $this->name = strtolower(get_class($this)); // internal identifier, unique and lowercase
         $this->tab = 'front_office_features'; // backend module coresponding category
         $this->version = '0.0.1'; // version number for the module
         $this->author = 'PremiumPresta'; // module author
@@ -76,7 +76,14 @@ class StarterPsModule extends Module
      */
     public function getContent()
     {
-        $this->context->smarty->assign('module_dir', $this->_path);
+        $this->context->smarty->assign([
+            'module' => [
+                'class' => get_class($this),
+                'name' => $this->name,
+                'displayName' => $this->displayName,
+                'dir' => $this->_path
+            ]
+        ]);
 
         return $this->postProcess() . $this->renderForm();
     }
@@ -143,7 +150,7 @@ class StarterPsModule extends Module
     protected function postProcess()
     {
         if (Tools::isSubmit('saveBtn')) {
-            $config = array();
+            $config = $this->getConfigValues();
 
             $languages = Language::getLanguages();
             foreach ($languages as $lang) {
@@ -152,7 +159,7 @@ class StarterPsModule extends Module
 
             $config['author'] = Tools::getValue('author');
             $config['show_author'] = Tools::getValue('show_author');
-            Configuration::updateValue($this->name, Tools::jsonEncode($config));
+            $this->setConfigValues($config);
 
             return $this->displayConfirmation($this->l('Settings updated'));
         }
@@ -185,11 +192,22 @@ class StarterPsModule extends Module
     }
 
     /**
-     * Set values for the inputs.
+     * Get configuration array from database
+     * @return array
      */
     public function getConfigValues()
     {
         return json_decode(Configuration::get($this->name), true);
+    }
+    
+    /**
+     * Set configuration array to database
+     * @param array $config
+     * @return boolean
+     */
+    public function setConfigValues($config)
+    {
+        return Configuration::updateValue($this->name, json_encode($config));
     }
 
     /**
@@ -208,7 +226,7 @@ class StarterPsModule extends Module
         $config['author'] = 'Mark Twain';
         $config['show_author'] = true;
 
-        return Configuration::updateValue($this->name, json_encode($config));
+        return $this->setConfigValues($config);
     }
 
     /**
@@ -227,7 +245,7 @@ class StarterPsModule extends Module
     {
         !isset($params['tpl']) && $params['tpl'] = 'displayHome';
 
-        $config = json_decode(Configuration::get($this->name), true);
+        $config = $this->getConfigValues();
         $this->smarty->assign($config);
 
         return $this->display(__FILE__, $params['tpl'] . '.tpl');
