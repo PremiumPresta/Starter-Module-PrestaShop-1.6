@@ -150,7 +150,7 @@ class StarterPsModule extends Module
     protected function postProcess()
     {
         if (Tools::isSubmit('saveBtn')) {
-            $config = array();
+            $config = $this->getConfigValues();
 
             $languages = Language::getLanguages();
             foreach ($languages as $lang) {
