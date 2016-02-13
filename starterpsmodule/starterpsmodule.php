@@ -12,8 +12,12 @@ if (!defined('_PS_VERSION_')) {
 
 class StarterPsModule extends Module
 {
-    /** @var Use to store the configuration from database */
+
+    /** @var array Use to store the configuration from database */
     public $config_values;
+
+    /** @var array submit values of the configuration page */
+    protected static $config_post_submit_values = array('submitConfig');
 
     public function __construct()
     {
@@ -71,7 +75,7 @@ class StarterPsModule extends Module
             $this->context->controller->addCSS($this->_path . 'views/css/configuration.css');
         }
     }
-    
+
     /**
      * Set the default configuration
      * @return boolean
@@ -96,8 +100,8 @@ class StarterPsModule extends Module
      */
     public function getContent()
     {
-        $this->config_values = $this->getConfigValues(); 
-        
+        $this->config_values = $this->getConfigValues();
+
         $this->context->smarty->assign(array(
             'module' => array(
                 'class' => get_class($this),
@@ -107,7 +111,43 @@ class StarterPsModule extends Module
             )
         ));
 
-        return $this->postProcess() . $this->renderForm();
+        return $this->postProcess();
+    }
+
+    /**
+     * Save form data.
+     */
+    protected function postProcess()
+    {
+        $output = '';
+
+        switch ($this->getPostSubmitValue()) {
+            /* save module configuration */
+            case 'saveConfig':
+                $languages = Language::getLanguages();
+                foreach ($languages as $lang) {
+                    $this->config_values['quote'][$lang['id_lang']] = Tools::getValue('quote_' . $lang['id_lang']);
+                }
+
+                $config_keys = array_keys($this->config_values);
+                unset($config_keys['quote']); // language field was set
+
+                foreach ($config_keys as $key) {
+                    $this->config_values[$key] = Tools::getValue($key, $this->config_values[$key]);
+                }
+
+                if ($this->setConfigValues($this->config_values)) {
+                    $output .= $this->displayConfirmation($this->l('Settings updated'));
+                }
+                
+                // it continues to default
+
+            default:
+                $output .= $this->renderForm();
+                break;
+        }
+
+        return $output;
     }
 
     /**
@@ -158,33 +198,12 @@ class StarterPsModule extends Module
                     ),
                 ),
                 'submit' => array(
-                    'name' => 'saveBtn',
+                    'name' => 'saveConfig',
                     'title' => $this->l('Save'),
                     'class' => 'btn btn-success pull-right'
                 )
             )
         );
-    }
-
-    /**
-     * Save form data.
-     */
-    protected function postProcess()
-    {
-        if (Tools::isSubmit('saveBtn')) {
-            $config = $this->getConfigValues();
-
-            $languages = Language::getLanguages();
-            foreach ($languages as $lang) {
-                $config['quote'][$lang['id_lang']] = Tools::getValue('quote_' . $lang['id_lang']);
-            }
-
-            $config['author'] = Tools::getValue('author');
-            $config['show_author'] = Tools::getValue('show_author');
-            $this->setConfigValues($config);
-
-            return $this->displayConfirmation($this->l('Settings updated'));
-        }
     }
 
     /**
@@ -240,7 +259,22 @@ class StarterPsModule extends Module
 
         return false;
     }
-    
+
+    /**
+     * Get the action submited from the configuration page
+     * @return string
+     */
+    protected function getPostSubmitValue()
+    {
+        foreach (self::$config_post_submit_values as $value) {
+            if (Tools::isSubmit($value)) {
+                return $value;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Determins if on the module configuration page
      * @return bool
@@ -249,7 +283,7 @@ class StarterPsModule extends Module
     {
         return self::isAdminPage('modules') && Tools::getValue('configure') === $this->name;
     }
-    
+
     /**
      * Determines if on the specified admin page
      * @param string $page
