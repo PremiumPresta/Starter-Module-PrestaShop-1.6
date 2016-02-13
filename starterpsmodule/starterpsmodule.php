@@ -18,7 +18,7 @@ class StarterPsModule extends Module
     public $config_values;
 
     /** @var array submit values of the configuration page */
-    protected static $config_post_submit_values = array('submitConfig');
+    protected static $config_post_submit_values = array('saveConfig');
 
     public function __construct()
     {
