@@ -139,8 +139,8 @@ class StarterPsModule extends Module
                 if ($this->setConfigValues($this->config_values)) {
                     $output .= $this->displayConfirmation($this->l('Settings updated'));
                 }
-                
-                // it continues to default
+
+            // it continues to default
 
             default:
                 $output .= $this->renderForm();
@@ -214,17 +214,17 @@ class StarterPsModule extends Module
         $helper = new HelperForm();
 
         $helper->show_toolbar = false;
-        $helper->table = $this->table;
+        $helper->table = $this->name;
         $helper->module = $this;
         $helper->default_form_language = $this->context->language->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
 
-        $helper->identifier = $this->identifier;
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
+        $helper->identifier = $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name . '&module_name=' . $this->name . '&tab_module=' . $this->tab;
 
         $helper->tpl_vars = array(
-            'fields_value' => $this->getConfigValues(), /* Add values for your inputs */
+            'fields_value' => $this->config_values, /* Add values for your inputs */
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
         );
