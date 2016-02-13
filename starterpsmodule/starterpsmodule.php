@@ -82,17 +82,17 @@ class StarterPsModule extends Module
      */
     protected function initConfig()
     {
-        $config = array();
+        $this->config_values = array(
+            'author' => 'Mark Twain',
+            'show_author' => true
+        );
 
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
-            $config['quote'][$lang['id_lang']] = 'The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one.';
+            $this->config_values['quote'][$lang['id_lang']] = 'The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one.';
         }
 
-        $config['author'] = 'Mark Twain';
-        $config['show_author'] = true;
-
-        return $this->setConfigValues($config);
+        return $this->setConfigValues($this->config_values);
     }
 
     /**
@@ -310,8 +310,8 @@ class StarterPsModule extends Module
     {
         !isset($params['tpl']) && $params['tpl'] = 'displayHome';
 
-        $config = $this->getConfigValues();
-        $this->smarty->assign($config);
+        $this->config_values = $this->getConfigValues();
+        $this->smarty->assign($this->config_values);
 
         return $this->display(__FILE__, $params['tpl'] . '.tpl');
     }
