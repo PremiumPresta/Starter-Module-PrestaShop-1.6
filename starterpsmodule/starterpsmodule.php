@@ -159,7 +159,7 @@ class StarterPsModule extends Module
         return array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->l('Starter PrestaShop Module'),
+                    'title' => $this->displayName,
                     'icon' => 'icon-cogs'
                 ),
                 'input' => array(
