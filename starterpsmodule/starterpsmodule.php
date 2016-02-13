@@ -3,9 +3,10 @@
  * Starter Module
  * 
  *  @author    PremiumPresta <office@premiumpresta.com>
- *  @copyright 2015 PremiumPresta
+ *  @copyright PremiumPresta
  *  @license   http://creativecommons.org/licenses/by/4.0/ CC BY 4.0
  */
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -21,7 +22,7 @@ class StarterPsModule extends Module
 
     public function __construct()
     {
-        $this->name = strtolower(get_class($this)); // internal identifier, unique and lowercase
+        $this->name = 'starterpsmodule'; // internal identifier, unique and lowercase
         $this->tab = 'front_office_features'; // backend module coresponding category
         $this->version = '0.0.1'; // version number for the module
         $this->author = 'PremiumPresta'; // module author
