@@ -6,7 +6,6 @@
  *  @copyright 2015 PremiumPresta
  *  @license   http://creativecommons.org/licenses/by/4.0/ CC BY 4.0
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -43,7 +42,7 @@ class StarterPsModule extends Module
 
         return parent::install() &&
                 $this->initConfig() &&
-                $this->registerHook('backOfficeHeader') &&
+                $this->registerHook('actionAdminControllerSetMedia') &&
                 $this->registerHook('header') &&
                 $this->registerHook('displayHome');
     }
@@ -61,13 +60,13 @@ class StarterPsModule extends Module
     }
 
     /**
-     * Add the CSS & JavaScript files you want to be loaded in the BO.
+     * Add the CSS & JavaScript files you want to be loaded in BO.
      */
-    public function hookBackOfficeHeader()
+    public function hookActionAdminControllerSetMedia()
     {
-        if (Tools::getValue('module_name') == $this->name) {
-            $this->context->controller->addJS($this->_path . 'views/js/back.js');
-            $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+        if ($this->isConfigPage()) {
+            $this->context->controller->addJS($this->_path . 'views/js/configuration.js');
+            $this->context->controller->addCSS($this->_path . 'views/css/configuration.css');
         }
     }
 
@@ -199,7 +198,7 @@ class StarterPsModule extends Module
     {
         return json_decode(Configuration::get($this->name), true);
     }
-    
+
     /**
      * Set configuration array to database
      * @param array $config
@@ -208,6 +207,25 @@ class StarterPsModule extends Module
     public function setConfigValues($config)
     {
         return Configuration::updateValue($this->name, json_encode($config));
+    }
+    
+    /**
+     * Determins if on the module configuration page
+     * @return bool
+     */
+    public function isConfigPage()
+    {
+        return self::isAdminPage('modules') && Tools::getValue('configure') === $this->name;
+    }
+    
+    /**
+     * Determines if on the specified admin page
+     * @param string $page
+     * @return bool
+     */
+    public static function isAdminPage($page)
+    {
+        return Tools::getValue('controller') === 'Admin' . ucfirst($page);
     }
 
     /**
