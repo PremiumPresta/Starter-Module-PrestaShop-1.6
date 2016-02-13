@@ -12,6 +12,8 @@ if (!defined('_PS_VERSION_')) {
 
 class StarterPsModule extends Module
 {
+    /** @var Use to store the configuration from database */
+    public $config_values;
 
     public function __construct()
     {
@@ -69,12 +71,33 @@ class StarterPsModule extends Module
             $this->context->controller->addCSS($this->_path . 'views/css/configuration.css');
         }
     }
+    
+    /**
+     * Set the default configuration
+     * @return boolean
+     */
+    protected function initConfig()
+    {
+        $config = array();
+
+        $languages = Language::getLanguages(false);
+        foreach ($languages as $lang) {
+            $config['quote'][$lang['id_lang']] = 'The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one.';
+        }
+
+        $config['author'] = 'Mark Twain';
+        $config['show_author'] = true;
+
+        return $this->setConfigValues($config);
+    }
 
     /**
      * Configuration page
      */
     public function getContent()
     {
+        $this->config_values = $this->getConfigValues(); 
+        
         $this->context->smarty->assign(array(
             'module' => array(
                 'class' => get_class($this),
@@ -226,25 +249,6 @@ class StarterPsModule extends Module
     public static function isAdminPage($page)
     {
         return Tools::getValue('controller') === 'Admin' . ucfirst($page);
-    }
-
-    /**
-     * Set the default configuration
-     * @return boolean
-     */
-    protected function initConfig()
-    {
-        $config = array();
-
-        $languages = Language::getLanguages(false);
-        foreach ($languages as $lang) {
-            $config['quote'][$lang['id_lang']] = 'The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming tasks into small manageable tasks, and then starting on the first one.';
-        }
-
-        $config['author'] = 'Mark Twain';
-        $config['show_author'] = true;
-
-        return $this->setConfigValues($config);
     }
 
     /**
