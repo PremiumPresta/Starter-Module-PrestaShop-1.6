@@ -224,12 +224,21 @@ class StarterPsModule extends Module
 
     /**
      * Set configuration array to database
-     * @param array $config
-     * @return boolean
+     * @param array $config 
+     * @param bool $merge when true, $config can be only a subset to modify or add additional fields
+     * @return array
      */
-    public function setConfigValues($config)
+    public function setConfigValues($config, $merge = false)
     {
-        return Configuration::updateValue($this->name, json_encode($config));
+        if ($merge) {
+            $config = array_merge($this->getConfigValues(), $config);
+        }
+
+        if (Configuration::updateValue($this->name, json_encode($config))) {
+            return $config;
+        }
+
+        return false;
     }
     
     /**
