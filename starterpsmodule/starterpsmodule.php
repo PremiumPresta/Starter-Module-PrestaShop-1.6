@@ -50,7 +50,7 @@ class StarterPsModule extends Module
         return parent::install() &&
                 $this->initConfig() &&
                 $this->registerHook('actionAdminControllerSetMedia') &&
-                $this->registerHook('header') &&
+                $this->registerHook('actionFrontControllerSetMedia') &&
                 $this->registerHook('displayHome');
     }
 
@@ -296,9 +296,9 @@ class StarterPsModule extends Module
     }
 
     /**
-     * Add the CSS & JavaScript files you want to be added on the FO.
+     * Add the CSS & JavaScript files on FO.
      */
-    public function hookHeader()
+    public function hookActionFrontControllerSetMedia()
     {
         $this->context->controller->addJS($this->_path . '/views/js/front.js');
         $this->context->controller->addCSS($this->_path . '/views/css/front.css');
